@@ -43,6 +43,20 @@ uv run ruff format .
 uv run ruff check .
 ```
 
+## CI
+
+このリポジトリでは、GitHub Actionsを使ってPull Request作成時およびmainブランチへのpush時に、Lintとテストを自動実行します。
+
+実行しているチェックは以下です。
+
+```bash
+uv run ruff check .
+uv run pytest
+```
+
+これにより、コード変更時に最低限の品質確認を自動化しています。
+
+
 ## CLIでの実行
 
 CLIから業務メモ整理ロジックを実行できます。

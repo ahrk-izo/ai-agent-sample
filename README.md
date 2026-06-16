@@ -38,10 +38,42 @@ uv run pytest
 ## Lint
 
 ```bash
+uv run ruff check . --fix
+uv run ruff format .
 uv run ruff check .
 ```
 
-## 現在の実装範囲
+## CLIでの実行
+
+CLIから業務メモ整理ロジックを実行できます。
+
+現時点では外部LLM APIは呼び出さず、モックLLMクライアントを使って固定レスポンスを返します。
+
+```bash
+uv run python -m app.cli "金曜日までに資料を確認する。レビュー時間が不足する可能性がある。"
+```
+
+出力例：
+
+```bash
+Input:
+金曜日までに資料を確認する。レビュー時間が不足する可能性がある。
+
+Summary:
+入力された業務メモを整理した要約です。
+
+Decisions:
+- 現時点ではLLMレスポンスの構造化は未実装です。
+
+TODO:
+- 現時点ではLLMレスポンスの構造化は未実装です。
+
+Risks:
+- 現時点ではLLMレスポンスの構造化は未実装です。
+
+Next Actions:
+- 現時点ではLLMレスポンスの構造化は未実装です。
+```
 
 ## 現在の実装範囲
 

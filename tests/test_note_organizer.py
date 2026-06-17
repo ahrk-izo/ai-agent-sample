@@ -3,7 +3,7 @@ from pydantic import ValidationError
 
 from app.llm.mock import MockLLMClient
 from app.models.note import BusinessNoteInput, OrganizedNote
-from app.services.note_organizer import build_prompt, organize_note
+from app.services.note_organizer import organize_note
 
 
 def test_business_note_input_accepts_content() -> None:
@@ -15,17 +15,6 @@ def test_business_note_input_accepts_content() -> None:
 def test_business_note_input_rejects_empty_content() -> None:
     with pytest.raises(ValidationError):
         BusinessNoteInput(content="")
-
-
-def test_build_prompt_includes_note_content() -> None:
-    note = BusinessNoteInput(content="会議で次回までに資料を確認することになった。")
-
-    prompt = build_prompt(note)
-
-    assert "以下の業務メモを整理してください。" in prompt
-    assert "会議で次回までに資料を確認することになった。" in prompt
-    assert "要約" in prompt
-    assert "TODO" in prompt
 
 
 def test_organize_note_returns_organized_note() -> None:

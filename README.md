@@ -35,6 +35,30 @@ uv sync
 uv run pytest
 ```
 
+## テストカバレッジ
+
+pytest-cov を使って、テストカバレッジを確認します。
+
+```bash
+uv run pytest --cov=app --cov-report=term-missing
+```
+
+`term-missing` を指定すると、テストされていない行を確認できます。
+HTML形式で確認する場合は、以下を実行します。
+
+```bash
+uv run pytest --cov=app --cov-report=term-missing --cov-report=html --cov-fail-under=80
+```
+
+実行後、`htmlcov/index.html` をブラウザで開きます。
+
+```bash
+open htmlcov/index.html
+```
+
+CIでは最低カバレッジ率を80%に設定し、HTMLカバレッジレポートを coverage-html artifact として保存します。
+
+
 ## Lint
 
 ```bash
@@ -46,15 +70,15 @@ uv run ruff check .
 ## CI
 
 このリポジトリでは、GitHub Actionsを使ってPull Request作成時およびmainブランチへのpush時に、Lintとテストを自動実行します。
-
 実行しているチェックは以下です。
 
 ```bash
 uv run ruff check .
-uv run pytest
+uv run pytest --cov=app --cov-report=term-missing --cov-report=html --cov-fail-under=80
 ```
 
 これにより、コード変更時に最低限の品質確認を自動化しています。
+CIでは、HTMLカバレッジレポートを `coverage-html` artifact として保存します。
 
 
 ## CLIでの実行

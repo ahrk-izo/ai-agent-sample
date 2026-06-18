@@ -1,5 +1,6 @@
 from app.llm.base import LLMClient
 from app.models.note import BusinessNoteInput, OrganizedNote
+from app.parsers.note_response_parser import parse_organized_note_response
 from app.prompts.note_prompt import build_note_organization_prompt
 
 
@@ -8,10 +9,4 @@ def organize_note(note: BusinessNoteInput, llm_client: LLMClient) -> OrganizedNo
     prompt = build_note_organization_prompt(note)
     response = llm_client.generate(prompt)
 
-    return OrganizedNote(
-        summary=response,
-        decisions=["現時点ではLLMレスポンスの構造化は未実装です。"],
-        todos=["現時点ではLLMレスポンスの構造化は未実装です。"],
-        risks=["現時点ではLLMレスポンスの構造化は未実装です。"],
-        next_actions=["現時点ではLLMレスポンスの構造化は未実装です。"],
-    )
+    return parse_organized_note_response(response)

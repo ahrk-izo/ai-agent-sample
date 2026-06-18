@@ -8,10 +8,13 @@ def build_note_organization_prompt(note: BusinessNoteInput) -> str:
 業務メモ:
 {note.content}
 
-出力項目:
-- 要約
-- 決定事項
-- TODO
-- リスク
-- 次に確認すべきこと
+出力は以下のJSON形式のみで返してください。
+
+{{
+  "summary": "要約",
+  "decisions": ["決定事項"],
+  "todos": ["TODO"],
+  "risks": ["リスク"],
+  "next_actions": ["次に確認すべきこと"]
+}}
 """

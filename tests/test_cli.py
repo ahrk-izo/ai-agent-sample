@@ -48,6 +48,9 @@ def test_main_outputs_organized_note(capsys) -> None:
     assert "Summary:" in captured.out
     assert "入力された業務メモを整理した要約です。" in captured.out
     assert "TODO:" in captured.out
+    assert "- 資料を確認する" in captured.out
+    assert "Risks:" in captured.out
+    assert "- レビュー時間が不足する可能性があります。" in captured.out
 
 
 def test_format_cli_output_includes_input_note() -> None:

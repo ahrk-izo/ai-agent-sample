@@ -16,8 +16,16 @@ def test_build_note_organization_prompt_includes_output_items() -> None:
 
     prompt = build_note_organization_prompt(note)
 
-    assert "要約" in prompt
-    assert "決定事項" in prompt
-    assert "TODO" in prompt
-    assert "リスク" in prompt
-    assert "次に確認すべきこと" in prompt
+    assert "summary" in prompt
+    assert "decisions" in prompt
+    assert "todos" in prompt
+    assert "risks" in prompt
+    assert "next_actions" in prompt
+
+
+def test_build_note_organization_prompt_requests_json_only() -> None:
+    note = BusinessNoteInput(content="会議メモです。")
+
+    prompt = build_note_organization_prompt(note)
+
+    assert "JSON形式のみ" in prompt

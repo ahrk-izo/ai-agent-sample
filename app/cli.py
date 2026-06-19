@@ -3,6 +3,7 @@ import argparse
 from app.llm.mock import MockLLMClient
 from app.models.note import BusinessNoteInput, OrganizedNote
 from app.services.note_organizer import organize_note
+from app.llm.sample_responses import MOCK_ORGANIZED_NOTE_RESPONSE
 
 
 def format_cli_output(
@@ -60,15 +61,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     note = BusinessNoteInput(content=args.content)
-    llm_client = MockLLMClient(
-        response="""{
-  "summary": "入力された業務メモを整理した要約です。",
-  "decisions": ["現時点ではモックの決定事項です。"],
-  "todos": ["資料を確認する"],
-  "risks": ["レビュー時間が不足する可能性があります。"],
-  "next_actions": ["レビュー日程を確認する"]
-}"""
-    )
+    llm_client = MockLLMClient(response=MOCK_ORGANIZED_NOTE_RESPONSE)
     organized_note = organize_note(note, llm_client)
 
     print(format_cli_output(note, organized_note))

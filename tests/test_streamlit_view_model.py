@@ -1,15 +1,6 @@
 from app.llm.mock import MockLLMClient
 from app.models.note import OrganizedNote
-from app.ui.streamlit_view_model import create_mock_note_llm_client, organize_note_text
-
-
-def test_create_mock_note_llm_client_returns_mock_response() -> None:
-    llm_client = create_mock_note_llm_client()
-
-    response = llm_client.generate("test prompt")
-
-    assert "summary" in response
-    assert "todos" in response
+from app.ui.streamlit_view_model import organize_note_text
 
 
 def test_organize_note_text_returns_organized_note() -> None:

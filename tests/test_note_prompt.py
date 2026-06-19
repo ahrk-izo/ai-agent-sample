@@ -29,3 +29,4 @@ def test_build_note_organization_prompt_requests_json_only() -> None:
     prompt = build_note_organization_prompt(note)
 
     assert "JSON形式のみ" in prompt
+    assert "Markdownのコードブロックは含めないでください。" in prompt

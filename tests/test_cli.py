@@ -69,3 +69,14 @@ def test_format_cli_output_includes_input_note() -> None:
     assert "金曜日までに資料を確認する。" in result
     assert "Summary:" in result
     assert "会議メモの要約です。" in result
+
+
+def test_main_accepts_provider_option(capsys) -> None:
+    exit_code = main(["--provider", "mock", "金曜日までに資料を確認する。"])
+
+    captured = capsys.readouterr()
+
+    assert exit_code == 0
+    assert "Input:" in captured.out
+    assert "金曜日までに資料を確認する。" in captured.out
+    assert "Summary:" in captured.out

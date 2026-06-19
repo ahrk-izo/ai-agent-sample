@@ -1,9 +1,8 @@
 import argparse
 
-from app.llm.mock import MockLLMClient
 from app.models.note import BusinessNoteInput, OrganizedNote
 from app.services.note_organizer import organize_note
-from app.llm.sample_responses import MOCK_ORGANIZED_NOTE_RESPONSE
+from app.llm.factory import OPENAI_PROVIDER, MOCK_PROVIDER, create_llm_client
 
 
 def format_cli_output(
@@ -52,6 +51,12 @@ def create_parser() -> argparse.ArgumentParser:
         "content",
         help="整理したい業務メモ",
     )
+    parser.add_argument(
+        "--provider",
+        choices=[MOCK_PROVIDER, OPENAI_PROVIDER],
+        default=None,
+        help="利用するLLMプロバイダー。未指定の場合は環境変数 LLM_PROVIDER または mock を使用します。",
+    )
     return parser
 
 
@@ -61,7 +66,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     note = BusinessNoteInput(content=args.content)
-    llm_client = MockLLMClient(response=MOCK_ORGANIZED_NOTE_RESPONSE)
+    llm_client = create_llm_client(provider=args.provider)
     organized_note = organize_note(note, llm_client)
 
     print(format_cli_output(note, organized_note))

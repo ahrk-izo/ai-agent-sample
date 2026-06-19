@@ -1,9 +1,10 @@
+import os
 import streamlit as st
 from pydantic import ValidationError
 
 from app.models.note import OrganizedNote
 from app.ui.streamlit_view_model import organize_note_text
-
+from app.llm.factory import OPENAI_API_KEY_ENV, OPENAI_PROVIDER, MOCK_PROVIDER
 
 DEFAULT_NOTE = "金曜日までに資料を確認する。レビュー時間が不足する可能性がある。"
 
@@ -38,6 +39,16 @@ def main() -> None:  # pragma: no cover
     st.write("業務メモをAIで整理するサンプルUIです。")
     st.caption("現時点では外部LLM APIは呼び出さず、モックLLMクライアントを使用します。")
 
+    provider = st.radio(
+        "LLM Provider",
+        options=[MOCK_PROVIDER, OPENAI_PROVIDER],
+        horizontal=True,
+        help="OpenAIを選択する場合は OPENAI_API_KEY が必要です。",
+    )
+
+    if provider == OPENAI_PROVIDER and not os.getenv(OPENAI_API_KEY_ENV):
+        st.warning("OPENAI_API_KEY が未設定のため、MockLLMClientを使用します。")
+
     content = st.text_area(
         "業務メモ",
         value=DEFAULT_NOTE,
@@ -51,7 +62,7 @@ def main() -> None:  # pragma: no cover
             return
 
         try:
-            result = organize_note_text(content)
+            result = organize_note_text(content, provider=provider)
         except ValidationError:
             st.error("入力内容を確認してください。")
             return

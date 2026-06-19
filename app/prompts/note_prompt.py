@@ -9,6 +9,7 @@ def build_note_organization_prompt(note: BusinessNoteInput) -> str:
 {note.content}
 
 出力は以下のJSON形式のみで返してください。
+説明文やMarkdownのコードブロックは含めないでください。
 
 {{
   "summary": "要約",

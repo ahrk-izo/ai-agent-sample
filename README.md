@@ -56,6 +56,7 @@
 - Lint、テスト、カバレッジ確認
 - CIでのHTMLカバレッジレポート保存
 - Streamlitによる簡易UI
+- DockerによるStreamlit UI起動
 
 ## 技術スタック
 
@@ -68,6 +69,8 @@
 - uv
 - Streamlit
 - OpenAI SDK
+- Docker
+- Docker Compose
 
 ## ディレクトリ構成
 
@@ -104,11 +107,14 @@ ai-agent-sample/
 │   ├── test_note_organizer.py
 │   ├── test_note_prompt.py
 │   └── test_note_response_parser.py
+├── .dockerignore
 ├── .github/
 │   └── workflows/
 │       └── ci.yml
 ├── .gitignore
 ├── .python-version
+├── Dockerfile
+├── docker-compose.yml
 ├── pyproject.toml
 ├── uv.lock
 └── README.md
@@ -218,6 +224,45 @@ UI上で `mock` / `openai` を選択できます。
 export OPENAI_API_KEY="your_api_key_here"
 PYTHONPATH=. LLM_PROVIDER=openai uv run streamlit run app/ui/streamlit_app.py
 ```
+
+
+## Dockerでの実行
+
+Dockerを使って、ローカルのPython環境に依存せずStreamlit UIを起動できます。
+
+デフォルトでは `MockLLMClient` を使用します。
+
+
+```bash
+docker compose up --build
+```
+
+起動後、ブラウザで以下にアクセスします。
+
+```text
+http://localhost:8501
+```
+
+終了する場合は、別ターミナルで以下を実行します。
+
+```bash
+docker compose down
+```
+
+OpenAI APIを使う場合は、`OPENAI_API_KEY` と `LLM_PROVIDER=openai` を指定します。
+
+```bash
+OPENAI_API_KEY="your_api_key_here" LLM_PROVIDER=openai docker compose up --build
+```
+
+モデルを指定する場合は、`OPENAI_MODEL` を指定します。
+
+```bash
+OPENAI_API_KEY="your_api_key_here" LLM_PROVIDER=openai OPENAI_MODEL=gpt-4.1-mini docker compose up --build
+```
+
+`OPENAI_API_KEY` が未設定の場合は、OpenAI APIを呼び出さず、MockLLMClientを使用します。
+
 
 ## 開発時の確認コマンド
 
@@ -391,6 +436,12 @@ uv run pytest --cov=app --cov-report=term-missing --cov-report=html --cov-fail-u
 CIでは、HTMLカバレッジレポートを `coverage-html` artifact として保存します。
 
 これにより、コード変更時に最低限の品質確認を自動化しています。
+
+DockerはStreamlit UIをローカル環境に依存せず起動するために用意しています。
+
+現時点では、CI上でDockerを使ったテスト実行は行っていません。  
+CIでは引き続き、GitHub Actions上でRuff、pytest、カバレッジ確認を実行します。
+
 
 ## 開発フロー
 
